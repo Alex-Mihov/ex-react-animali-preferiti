@@ -19,19 +19,37 @@
     //usestate
     const { useState } = React
 
+
     const ListaAnimali = () => {
 
-      const animals = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+      const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+
+      const [animals, setAnimals] = useState([])
+
+
+      const aggiungiAnimale = () => {
+
+        const animaleCasuale = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
+
+        setAnimals([...animals, animaleCasuale])
+
+      }
+
 
       return (
-        <details>
-          <summary>Animali</summary>
-          <ul>
-            {animals.map((animal, index) => (
-              <li key={index}>{animal}</li>
-            ))}
-          </ul>
-        </details>
+        <>
+          <button onClick={aggiungiAnimale}>Aggiungi Animale</button>
+
+          <details>
+            <summary>Animali</summary>
+            <ul>
+              {animals.map((animal, index) => (
+                <li key={index}>{animal}</li>
+              ))}
+            </ul>
+          </details>
+        </>
+
       )
     }
   </script>
