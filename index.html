@@ -19,28 +19,71 @@
     //usestate
     const { useState } = React
 
+    function Modal({
+      title,
+      content,
+      show = false,
+      onClose = () => { },
+      onConfirm = () => { }
+    }) {
+      return show && ReactDOM.createPortal(
+        <div className="modal-container">
+          <div className="modal">
+            <h2>{title}</h2>
+            <p>{content}</p>
+            <button onClick={onClose}>Annulla</button>
+            <button onClick={onConfirm}>Conferma</button>
+          </div>
+        </div>,
+        document.body
+      )
+    }
+
 
     const ListaAnimali = () => {
 
-      const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
 
       const [animals, setAnimals] = useState([])
 
+      const [show, setShow] = useState(false)
 
-      const aggiungiAnimale = () => {
+      const [newAnimal, setNewAnimal] = useState("")
 
-        const animaleCasuale = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
-
-        setAnimals([...animals, animaleCasuale])
-
+      const openModal = () => {
+        setShow(true),
+          setNewAnimal("")
       }
 
+      const handleConfirm = () => {
+
+        setAnimals([...animals, newAnimal])
+
+        setShow(false)
+      }
 
       return (
         <>
-          <button onClick={aggiungiAnimale}>Aggiungi Animale</button>
+          <button onClick={openModal}>Aggiungi Animale</button>
 
           <details>
+
+            <section>
+              <Modal
+                title="Aggiungi un nuovo animale"
+                show={show}
+                onClose={() => setShow(false)}
+                onConfirm={handleConfirm}
+                content={
+                  <input
+                    type="text"
+                    value={newAnimal}
+                    onChange={(e) => setNewAnimal(e.target.value)}
+                  />
+                }
+              />
+            </section>
+
+
             <summary>Animali</summary>
             <ul>
               {animals.map((animal, index) => (
